@@ -14,4 +14,4 @@ GDP-Forecasting-Methods/
 │
 ├── README.md                  # Main project description
 ├── requirements.txt           # Python dependencies
-└── LICENSE                    # (Optional) License for your code
+└── LICENSE                    # License for your code
