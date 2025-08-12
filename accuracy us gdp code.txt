@@ -1,0 +1,84 @@
+# Forecasting with the TSLM model -
+forecast_data <- forecast(lr_tslm, new_data = validation_set)
+
+# Plot the forecast and prediction interval -
+forecast_gdp <- lr_tslm %>%
+  forecast(h = 4 * 17)
+
+forecast_gdp %>%
+  autoplot(gdpts) +
+  labs(title = "USA GDP",
+       x = "Quarter",
+       y = "GDP")
+
+
+#Plot for Manual ARIMA - 
+forecast_arima_manual_model <- forecast(ARIMA1.fit, new_data = validation_set)
+
+forecast_arima_manual_model %>%
+  autoplot(gdpts) +
+  labs(title = "Manual Arima Model forecast of USA's GDP",
+       x = "Quarter",
+       y = "GDP")
+
+#plot for auto arima
+forecast_arima_auto_model <- forecast(arima.model.fit, new_data = validation_set)
+
+forecast_arima_auto_model %>%
+  autoplot(gdpts) + 
+  labs(title = "Auto ARIMA Forecast of USA's GDP",
+       x = "Quarter",
+       y = "Value")
+
+# Let's look at the predictions
+ARIMA1.fit %>% forecast(h = 68) %>% 
+  autoplot(gdpts)
+
+#Plot for Manual ETS -
+forecast_manual_ets_model <- forecast(ets_manual1, new_data = validation_set)
+
+forecast_manual_ets_model %>%
+  autoplot(gdpts) +
+  labs(title = "Manual ETS Model forecast of USA's GDP",
+       x = "Quarter",
+       y = "GDP")
+
+#plot for auto ETS
+forecast_ets_auto_model <- forecast(ets.auto.model.fit, new_data = validation_set)
+
+forecast_ets_auto_model %>%
+  autoplot(gdpts) + 
+  labs(title = "Auto ETS Forecast of USA's GDP",
+       x = "Quarter",
+       y = "Value")
+
+# Let's look at the predictions
+ets_manual1 %>% forecast(h = 68) %>% 
+  autoplot(gdpts)
+
+
+
+# Which forecast is most accurate? - ARIMA MODEL SELECTED - LOWEST MAPE
+all.models.pred %>% fabletools::accuracy(gdpts)
+
+# Operational forecast (best model fit to all the data)
+# Generate forecasts
+usgdp_fc <- usgdpdata %>%
+  forecast(h = "40 years")
+
+augment(usgdpdata) %>%
+  filter(.model == "arima") %>%
+  ggplot(aes(x = quarter)) +
+  geom_line(aes(y = gdp, colour = "Data")) +
+  geom_line(aes(y = .fitted, colour = "Fitted")) +
+  labs(y = NULL,
+       title = "BEST FITTING ARIMA MODEL FOR USA GDP"
+  ) +
+  scale_colour_manual(values=c(Data="black",Fitted="#D55E00")) +
+  guides(colour = guide_legend(title = NULL))
+
+usgdp_fc %>%
+  filter(.model == "arima") %>%
+  autoplot(gdpts) +
+  labs(y = "$ billion",
+       title = "FINAL FORECAST OF USA GDP - ARIMA MODEL")
