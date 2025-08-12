@@ -1,10 +1,10 @@
 GDP-Forecasting-Methods/
 │
-├── data/                      # Your datasets (or links if data is too big/private)
+├── data/                      # Your datasets
 │   └── gdp_data.csv
 │
 ├── notebooks/                 # Jupyter notebooks or scripts
-│   └── GDP_Forecasting.ipynb
+│   └── usagdpforecasting.R
 │
 ├── src/                       # Python scripts (if you modularized code)
 │   └── forecast_models.py
